@@ -8,7 +8,7 @@ except ImportError:
 
 import oss2
 import oss2.exceptions
-
+from oss2 import ObjectIterator
 
 logger = logging.getLogger('flask_oss')
 
@@ -74,5 +74,8 @@ class FlaskOSS(object):
         finally:
             return is_delete
 
-
-
+    def list_files(self, prefix):
+        files = list()
+        for obj in ObjectIterator(self.bucket,prefix=prefix):
+            files.append(obj.key.split('/')[-1])
+        return files
